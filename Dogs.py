@@ -54,11 +54,13 @@ width_label = ttk.Label(window, text="Ширина:")
 width_label.pack(side='left', padx=(10, 0))
 width_spinbox = ttk.Spinbox(window, from_=200, to=500, increment=50, width=5)
 width_spinbox.pack(side='left', padx=(0, 10))
+width_spinbox.set(300)
 
 height_label = ttk.Label(window, text="Высота:")
 height_label.pack(side='left', padx=(10, 0))
 height_spinbox = ttk.Spinbox(window, from_=200, to=500, increment=50, width=5)
 height_spinbox.pack(side='left', padx=(0, 10))
+height_spinbox.set(300)
 
 # Создаем отдельное окно для Notebook
 top_level_window = Toplevel(window)
