@@ -1,5 +1,6 @@
 import requests
 from tkinter import *
+from tkinter import ttk
 from PIL import Image, ImageTk
 from io import BytesIO
 
@@ -9,12 +10,13 @@ def get_random_dog_image():
         response.raise_for_status()
         data = response.json()
         return data['message']
-    except Exception as e:
+    except requests.RequestException as e:
         messagebox.showerror("Ошибка", f"Ошибка при запросе к API: {e}")
         return None
 
 def show_image():
     image_url = get_random_dog_image()
+
     if image_url:
         try:
             response = requests.get(image_url, stream=True)
@@ -28,14 +30,26 @@ def show_image():
 
         except requests.RequestException as e:
             messagebox.showerror("Ошибка", f"Не удалось загрузить изображение: {e}")
+    # Останавливаем прогрессбар после загрузки картинки
+    progress.stop()
+
+def progress():
+    # Ставим прогрессбар в начальное положение
+    progress['value'] = 0
+    # Запускаем прогрессбар и увеличиваем значение от 0 до 100 за 3 секунды
+    progress.start(30)
+    window.after(3000, show_image)
 
 window = Tk()
-window.title("Картинки с собачками")
-window.geometry("360x420")
+window.title("Случайное изображение пёсика")
 
-label = Label()
+label = ttk.Label()
 label.pack(padx=10, pady=10)
 
-button = Button(text="Загрузить изображение", command=show_image)
+button = ttk.Button(text="Показать случайного пёсика", command=progress)
 button.pack(padx=10, pady=10)
+# Используем ttk.Progressbar для индикации загрузки
+progress = ttk.Progressbar(mode='determinate', length=300)
+progress.pack(padx=10, pady=10)
+
 window.mainloop()
